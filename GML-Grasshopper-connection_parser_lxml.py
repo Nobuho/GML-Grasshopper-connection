@@ -1,9 +1,15 @@
 from lxml import etree
-import codecs
-import re
 
 
-gml_filepath = "GML_files\A29-11_27_GML\A29-11_27.xml"
+def join_list2gh(listitem):
+    list_1 = []
+    for i in listitem:
+        list_1.append(",".join(i))
+    flatten = "+".join(list_1)
+    return flatten
+
+
+gml_filepath = "GML_files\A29-11_40_GML\A29-11_40.xml"
 
 # ##################################################
 # delete invalid xmlns
@@ -61,5 +67,8 @@ area_cbr = [i.text for i in root.iterfind(
     'ksj:DesignatedArea/ksj:cbr', namespaces=mynsmap)]
 area_src = [i.text for i in root.iterfind(
     'ksj:DesignatedArea/ksj:src', namespaces=mynsmap)]
+
+a = join_list2gh(crv_pt_x)
+b = join_list2gh(crv_pt_y)
 
 print("end")
