@@ -4,7 +4,7 @@ from lxml import etree
 def join_list2gh(listitem):
     list_1 = []
     for i in listitem:
-        list_1.append(",".join(i))
+        list_1.append(",".join(map(str, i)))
     flatten = "+".join(list_1)
     return flatten
 
@@ -44,10 +44,22 @@ crv_pt_y = [i.text.split()[1::2] for i in root.iterfind(
 
 srf_id = [i.attrib["{http://www.opengis.net/gml/3.2}id"]
           for i in root.iterfind('gml:Surface', namespaces=mynsmap)]
-srf_ex_crv_id = [i.attrib["{http://www.w3.org/1999/xlink}href"].replace("#", "")
-                 for i in root.iterfind('gml:Surface/gml:patches/gml:PolygonPatch/gml:exterior/gml:Ring/gml:curveMember', namespaces=mynsmap)]
-srf_in_crv_id = [i.attrib["{http://www.w3.org/1999/xlink}href"].replace("#", "")
-                 for i in root.iterfind('gml:Surface/gml:patches/gml:PolygonPatch/gml:interior/gml:Ring/gml:curveMember', namespaces=mynsmap)]
+# srf_ex_crv_id = [i.attrib["{http://www.w3.org/1999/xlink}href"].replace("#", "")
+#                  for i in root.iterfind('gml:Surface/gml:patches/gml:PolygonPatch/gml:exterior/gml:Ring/gml:curveMember', namespaces=mynsmap)]
+# srf_in_crv_id = [i.attrib["{http://www.w3.org/1999/xlink}href"].replace("#", "")
+#                  for i in root.iterfind('gml:Surface/gml:patches/gml:PolygonPatch/gml:interior/gml:Ring/gml:curveMember', namespaces=mynsmap)]
+
+srf = [i for i in root.iterfind('gml:Surface', namespaces=mynsmap)]
+
+srf_ex_elm = [i.findall(
+    "gml:patches/gml:PolygonPatch/gml:exterior/gml:Ring/gml:curveMember", namespaces=mynsmap) for i in srf]
+srf_ex_crv_id = [[n.attrib["{http://www.w3.org/1999/xlink}href"]
+                  .replace("#", "") for n in i] for i in srf_ex_elm]
+
+srf_in_elm = [i.findall(
+    "gml:patches/gml:PolygonPatch/gml:interior/gml:Ring/gml:curveMember", namespaces=mynsmap) for i in srf]
+srf_in_crv_id = [[n.attrib["{http://www.w3.org/1999/xlink}href"]
+                  .replace("#", "") for n in i] for i in srf_in_elm]
 
 area_id = [i.attrib["{http://www.w3.org/1999/xlink}href"].replace("#", "")
            for i in root.iterfind('ksj:DesignatedArea/ksj:cda', namespaces=mynsmap)]
@@ -68,7 +80,22 @@ area_cbr = [i.text for i in root.iterfind(
 area_src = [i.text for i in root.iterfind(
     'ksj:DesignatedArea/ksj:src', namespaces=mynsmap)]
 
-a = join_list2gh(crv_pt_x)
-b = join_list2gh(crv_pt_y)
+crv_ditc = {key: {"x": ptx, "y": ptx}
+            for key, ptx, pty in zip(crv_id, crv_pt_x, crv_pt_y)}
+
+srf_ditc = {key: {"ex": exc, "in": inc}
+            for key, exc, inc in zip(srf_id, srf_ex_crv_id, srf_in_crv_id)}
+
+final_x = []
+final_y = []
+
+for k, v in srf_ditc.items():
+    final_x.append([crv_ditc[i]["x"] for i in v["ex"]])  # list_ex_x
+    final_x.append([crv_ditc[i]["x"] for i in v["in"]])  # list_in_x
+    final_y.append([crv_ditc[i]["y"] for i in v["ex"]])  # list_ex_y
+    final_y.append([crv_ditc[i]["y"] for i in v["in"]])  # list_in_y
+
+a = join_list2gh(final_x)
+b = join_list2gh(final_y)
 
 print("end")
