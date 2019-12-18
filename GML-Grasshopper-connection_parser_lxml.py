@@ -10,7 +10,7 @@ def join_list2gh(listitem):
     return flatten
 
 
-gml_filepath = "GML_files\A29-11_40_GML\A29-11_40.xml"
+gml_filepath = "GML_files\A29-11_27_GML\A29-11_27.xml"
 
 # ##################################################
 # delete invalid xmlns
