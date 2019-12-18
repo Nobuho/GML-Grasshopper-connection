@@ -1,4 +1,5 @@
 from lxml import etree
+import csv
 
 
 def join_list2gh(listitem):
@@ -86,16 +87,46 @@ crv_ditc = {key: {"x": ptx, "y": ptx}
 srf_ditc = {key: {"ex": exc, "in": inc}
             for key, exc, inc in zip(srf_id, srf_ex_crv_id, srf_in_crv_id)}
 
-final_x = []
-final_y = []
+with open('points_id.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(crv_id)
 
-for k, v in srf_ditc.items():
-    final_x.append([crv_ditc[i]["x"] for i in v["ex"]])  # list_ex_x
-    final_x.append([crv_ditc[i]["x"] for i in v["in"]])  # list_in_x
-    final_y.append([crv_ditc[i]["y"] for i in v["ex"]])  # list_ex_y
-    final_y.append([crv_ditc[i]["y"] for i in v["in"]])  # list_in_y
+with open('points_x.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(crv_pt_x)
 
-a = join_list2gh(final_x)
-b = join_list2gh(final_y)
+with open('points_y.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(crv_pt_y)
+
+# --------------------------------------------------------------
+
+with open('srf_id.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(srf_id)
+
+with open('srf_ex_crv_id.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(srf_ex_crv_id)
+
+with open('srf_in_crv_id.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(srf_in_crv_id)
+
+# --------------------------------------------------------------
+
+with open('area_用途地域.csv', 'w', encoding="utf-8_sig", newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(area_kda)
+
+with open('area_建ぺい率.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(area_bar)
+
+with open('area_容積率.csv', 'w',  newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(area_cbr)
+
+# --------------------------------------------------------------
 
 print("end")
