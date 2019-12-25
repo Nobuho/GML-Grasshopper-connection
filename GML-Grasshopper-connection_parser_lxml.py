@@ -2,14 +2,6 @@ from lxml import etree
 import csv
 
 
-def join_list2gh(listitem):
-    list_1 = []
-    for i in listitem:
-        list_1.append(",".join(map(str, i)))
-    flatten = "+".join(list_1)
-    return flatten
-
-
 gml_filepath = "GML_files\A29-11_27_GML\A29-11_27.xml"
 
 # ##################################################
@@ -87,29 +79,29 @@ crv_ditc = {key: {"x": ptx, "y": ptx}
 srf_ditc = {key: {"ex": exc, "in": inc}
             for key, exc, inc in zip(srf_id, srf_ex_crv_id, srf_in_crv_id)}
 
-with open('points_id.csv', 'w',  newline='') as f:
+with open('points_id.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(crv_id)
 
-with open('points_x.csv', 'w',  newline='') as f:
+with open('points_x.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(crv_pt_x)
 
-with open('points_y.csv', 'w',  newline='') as f:
+with open('points_y.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(crv_pt_y)
 
 # --------------------------------------------------------------
 
-with open('srf_id.csv', 'w',  newline='') as f:
+with open('srf_id.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(srf_id)
 
-with open('srf_ex_crv_id.csv', 'w',  newline='') as f:
+with open('srf_ex_crv_id.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(srf_ex_crv_id)
 
-with open('srf_in_crv_id.csv', 'w',  newline='') as f:
+with open('srf_in_crv_id.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(srf_in_crv_id)
 
@@ -119,11 +111,11 @@ with open('area_用途地域.csv', 'w', encoding="utf-8_sig", newline='') as f:
     writer = csv.writer(f)
     writer.writerow(area_kda)
 
-with open('area_建ぺい率.csv', 'w',  newline='') as f:
+with open('area_建ぺい率.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(area_bar)
 
-with open('area_容積率.csv', 'w',  newline='') as f:
+with open('area_容積率.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(area_cbr)
 
